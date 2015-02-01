@@ -9,7 +9,7 @@ var BALLSIZE = 12,
     currentLevel=1,
     interval= null,
     playerShipSpeed = 60,
-    soundsEnabled = false,
+    soundsEnabled = true,
     infiniteLives = false,
     ball = null,
     paused = false,
@@ -54,73 +54,27 @@ Ball.prototype.checkBorders = function() {
   if(this.y <= windowBorder.top) {
     this.dy = -this.dy;
     this.y = windowBorder.top;
-<<<<<<< HEAD
     playSound("#arrow");
-=======
-    if(soundsEnabled)  {
-      $("#pong")[0].play();
-    }
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
   }
   else if(this.y >= windowBorder.bottom - 3*BALLSIZE) {
     if(debugging) {
       this.dy = -this.dy;
       this.y = windowBorder.bottom - 3*BALLSIZE;
-<<<<<<< HEAD
       playSound("#arrow");
     }
     else {        //////you die////////////////////////////////
-      playSound("#explosion");
-      $('.playerShip').hide("explode", 2000);
-      $('.ball').hide("explode");
-      clearInterval(interval);
-      if(!infiniteLives) {
-        livesRemaining--;
-      }
-      if(livesRemaining < 0) {
-        gameOver();
-      }
-      else {
-        setTimeout(function() {
-          $('.ball').remove();
-          $('.playerShip').remove();
-          initializeBall();
-          initializePlayerShip();
-          interval = null;
-          paused = false;
-        }, 2000);
-      }
-=======
-      if(soundsEnabled)  {
-        $("#pong")[0].play();
-      }
-    }
-    else {        //////you die////////////////////////////////
       playerDied();
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
     }
   }
   if(this.x <= windowBorder.left) {
     this.dx = -this.dx;
     this.x = windowBorder.left;
-<<<<<<< HEAD
     playSound("#arrow");
-=======
-    if(soundsEnabled)  {
-      $("#pong")[0].play();
-    }
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
   }
   else if(this.x >= windowBorder.right - BALLSIZE) {
     this.dx = -this.dx;
     this.x = windowBorder.right - BALLSIZE;
-<<<<<<< HEAD
     playSound("#arrow");
-=======
-    if(soundsEnabled)  {
-      $("#pong")[0].play();
-    }
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
   }
 }
 
@@ -191,9 +145,7 @@ function pointIsWithinRectangle(point, x, y, width, height) {
 }
 
 function playerDied() {
-  if(soundsEnabled)  {
-    $("#explosion")[0].play();
-  }
+  playSound('#explosion');
   $('.playerShip').hide("explode", 2000);
   $('.ball').hide("explode");
   clearInterval(interval);
@@ -210,15 +162,15 @@ function playerDied() {
 
 function resetPlayerShipAndBall() {
   $('.ball').remove();
-      $('.playerShip').remove();
-      initializeBall();
-      initializePlayerShip();
-      interval = null;
-      paused = false;
+  $('.playerShip').remove();
+  initializeBall();
+  initializePlayerShip();
+  interval = null;
+  paused = false;
 }
 
 function ballHitShip() {
-  $("#arrow")[0].play();
+  playSound('#pong');
   var $ship = $('.playerShip');
   var velocity = Math.sqrt(ball.dy*ball.dy + ball.dx*ball.dx);     // a^2 + b^2 = c^2
   var xShipGradient = (ball.x-$ship.offset().left) / ($ship.width());
@@ -247,7 +199,7 @@ function collisionHappened(collidee) {
         $(collidee).remove();
       });
       blocksOnScreen--;
-      if(blocksOnScreen == 0) {
+      if(blocksOnScreen <= 0) {
         levelCompleted();
       }
     }
@@ -255,6 +207,86 @@ function collisionHappened(collidee) {
 }
 
 /////////////INITIALIZATION FUNCTIONS/////////////////////////////
+
+
+
+
+function levelLayout(level) {
+  var rows = [];
+  switch(level) {
+  case 1:
+    if(debugging) {     // remove at some point
+      rows.push(['cyan']);
+    }
+    else {
+    rows.push(['#003333']);
+    rows.push([0, 0, '#00CC33', '#00CC33',  '#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33', 0, 0]);
+    rows.push([0,'#CC6699','#CC6699','#00CC33', 0, 0, 0, 0,'#00CC33',  '#CC6699','#CC6699', 0]);
+    rows.push(['#CC6699','#CC6699','#CC6699',0, 0, 0, 0, 0, 0, '#CC6699','#CC6699','#CC6699'])  ;
+    rows.push([0,'#CC6699','#CC6699','#00CC33', 0, 0, 0,   0,'#00CC33','#CC6699','#CC6699', 0]);
+    rows.push([0,   0,'#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33', 0, 0]);
+    rows.push(['#003333']);  }
+    return rows;
+    break;
+  case 2:
+    rows.push(['gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold']);
+    rows.push([0]);
+    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
+    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
+    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
+    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
+    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
+    rows.push([0,'gold','gold','gold','gold','gold','gold','gold','gold','gold','gold',]);
+    return rows;
+    break;
+  case 3:
+    rows.push(['gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold']);
+    rows.push(['gold','blue','blue','blue','blue','blue','blue','gold','gold','blue','blue','blue','blue','blue','blue','gold']);
+    rows.push(['gold','#0066CC',0,0,0 ,'#0066CC','#0066CC','#0066CC','#0066CC','#0066CC','#0066CC',0 ,0,0,'#0066CC','gold']);
+    rows.push(['gold','#3399FF',0 ,'#990033',0 ,'#990033','#3399FF','#3399FF','#3399FF','#3399FF','#990033',0 ,'#990033',0,'#3399FF','gold']);
+    rows.push(['gold','#0099CC',0 ,'#990033',0 ,'#0099CC','#990033','#0099CC','#0099CC','#990033','#0099CC',0 ,'#990033',0 ,'#0099CC','gold']);
+    rows.push(['gold','#33CCCC',0 ,0 ,0 ,'#33CCCC','#33CCCC','#990033','#990033','#33CCCC','#33CCCC',0 ,0 ,0 ,'#33CCCC','gold']);
+    rows.push(['gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold',0 ,0, 'gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold']);
+    rows.push(['gold','gold','gold','gold','gold','gold','gold',0 ,0 ,'gold','gold','gold','gold','gold','gold','gold',])
+    return rows;
+    break;
+  case 4:
+    rows.push([0]);
+    rows.push([0]);
+    rows.push(['gold']);
+    rows.push([0 ,'#330000',0 ,'#330000',0 ,'#330000']);
+    rows.push(['#990000','#990000','#990000']);
+    rows.push(['#330000',0 ,'#330000',0 ,'#330000',0]);
+    rows.push([0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633']);
+    rows.push(['#990000','#990000','#990000','#990000','#990000','#990000']);
+    rows.push(['#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0]);
+    rows.push([0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',]);
+    rows.push(['#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC']);
+    rows.push(['#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0]);
+    return rows;
+    break;
+  case 5:
+  if(debugging) {    // remove at some point
+    rows.push(['#111111']);
+  }
+  else {
+    rows.push([0]);
+    rows.push([0]);
+    rows.push([0]);
+    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);
+    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
+    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
+    rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
+    rows.push([0,'black','black','black','black','black','black','black','black','black','black','black','black','black','black',0]);
+     rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
+    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
+    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
+    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);}
+    return rows;
+    break;
+  }
+}
+
 function initializeBall() {
   var y = windowBorder.bottom * 0.8;
   ball = new Ball(200, y, 3, -4);
@@ -264,7 +296,6 @@ function initializePlayerShip() {
   $('<div>').addClass('playerShip collideableObject').appendTo('body');
   $('.playerShip').draggable({axis: "x", containment: 'parent'});
   setInterval(function() {
-    //var shadowEffect = randomShadowEffect();
     $('.playerShip').css({'box-shadow': randomShadowEffect()});
   }, 40);
 }
@@ -272,16 +303,14 @@ function initializePlayerShip() {
 function initializeLevel(level) {
   var backgroundUrl = getBGUrlForLevel(level);
   $('body').css({'background-image': 'url('+backgroundUrl+')' });
-  if(soundsEnabled) {
-    if(currentLevel%5 == 0) {
-      currentBGMusic = '#BossBattle';
-    }
-    else {
-      currentBGMusic = '#ChronoTheme';
-    }
-    $(currentBGMusic)[0].loop=true;
-    $(currentBGMusic)[0].play();
+  if(currentLevel%5 == 0) {
+    currentBGMusic = '#BossBattle';
   }
+  else {
+    currentBGMusic = '#ChronoTheme';
+   }
+  $(currentBGMusic)[0].loop=true;
+  playSound(currentBGMusic);
   initializeBlocks();
   initializeBall();
 }
@@ -304,75 +333,6 @@ function initializeBlocks() {
         $(block.html).addClass('invincible');
       }
     }
-  }
-}
-
-function levelLayout(level) {
-  var rows = [];
-  switch(level) {
-  case 1:
-    rows.push(['#003333']);
-    rows.push([0, 0, '#00CC33', '#00CC33',  '#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33', 0, 0]);
-    rows.push([0,'#CC6699','#CC6699','#00CC33', 0, 0, 0, 0,'#00CC33',  '#CC6699','#CC6699', 0]);
-    rows.push(['#CC6699','#CC6699','#CC6699',0, 0, 0, 0, 0, 0, '#CC6699','#CC6699','#CC6699'])  ;
-    rows.push([0,'#CC6699','#CC6699','#00CC33', 0, 0, 0,   0,'#00CC33','#CC6699','#CC6699', 0]);
-    rows.push([0,   0,'#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33', 0, 0]);
-    rows.push(['#003333']);
-    return rows;
-    break;
-  case 2:
-    rows.push(['gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold']);
-    rows.push([0]);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'gold','gold','gold','gold','gold','gold','gold','gold','gold','gold',]);
-    return rows;
-    break;
-  case 3:
-    rows.push(['gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold']);
-    rows.push(['gold','blue','blue','blue','blue','blue','blue','gold','gold','blue','blue','blue','blue','blue','blue','gold']);
-    rows.push(['gold','#0066CC',0,0,0 ,'#0066CC','#0066CC','#0066CC','#0066CC','#0066CC','#0066CC',0 ,0,0,'#0066CC','gold']);
-    rows.push(['gold','#3399FF',0 ,'#990033',0 ,'#990033','#3399FF','#3399FF','#3399FF','#3399FF','#990033',0 ,'#990033',0,'#3399FF','gold']);
-    rows.push(['gold','#0099CC',0 ,'#990033',0 ,'#0099CC','#990033','#0099CC','#0099CC','#990033','#0099CC',0 ,'#990033',0 ,'#0099CC','gold']);
-    rows.push(['gold','#33CCCC',0 ,0 ,0 ,'#33CCCC','gold','#990033','#990033','gold','#33CCCC',0 ,0 ,0 ,'#33CCCC','gold']);
-    rows.push(['gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold',0 ,0,'gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold']);
-    rows.push(['gold','gold','gold','gold','gold','gold','gold',0 ,0 ,'gold','gold','gold','gold','gold','gold','gold',])
-    return rows;
-    break;
-  case 4:
-    rows.push([0]);
-    rows.push([0]);
-    rows.push(['gold']);
-    rows.push([0 ,'#330000',0 ,'#330000',0 ,'#330000']);
-    rows.push(['#990000','#990000','#990000']);
-    rows.push(['#330000',0 ,'#330000',0 ,'#330000',0]);
-    rows.push([0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633']);
-    rows.push(['#990000','#990000','#990000','#990000','#990000','#990000']);
-    rows.push(['#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0]);
-    rows.push([0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',]);
-    rows.push(['#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC']);
-    rows.push(['#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0]);
-    return rows;
-    break;
-  case 5:
-    rows.push(['pink','pink',0 , 0, 'pink','pink']);
-    rows.push([0]);
-    rows.push([0]);
-    rows.push([0]);
-    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);
-    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
-    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
-    rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
-    rows.push([0,'black','black','black','black','black','black','black','black','black','black','black','black','black','black',0]);
-     rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
-    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
-    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
-    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);
-    return rows;
-    break;
   }
 }
 
@@ -435,19 +395,17 @@ function assignVariablesFromUrl() {
   }
 }
 
-<<<<<<< HEAD
-///////////Game event Functions///////////////////////////
+
+
+////////////GAME EVENT FUNCTIONS//////////////////////////////////
+
 
 function playSound(soundTag) {
   if(soundsEnabled) {
-    (soundTag)[0].play();
+    $(soundTag)[0].play();
   }
 }
 
-=======
-
-////////////GAME EVENT FUNCTIONS//////////////////////////////////
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
 function congratulationAnimation(message) {
   $('.ball').addClass('ballEnlarge');
   setTimeout(function() {
@@ -468,11 +426,11 @@ function levelCompleted() {
   }
   else {
     $(currentBGMusic)[0].pause();
-    playSound("#fanfare2");
+    playSound("#fanfare");
     congratulationAnimation('HELL YEAH!');
     var password = passwordForLevel(currentLevel);
     setTimeout(function() {
-      $("<h1>Password: "+password+"</h1>").addClass('congratulations').css('margin-top', '25%').appendTo('body');
+      $("<h1>Password: "+password+"</h1>").addClass('congratulations').appendTo('body');
     }, 3500);
     setTimeout(function() {
       $('.ball').remove()
@@ -515,91 +473,13 @@ function gameOver() {
    }, 3000);
 }
 
-<<<<<<< HEAD
-/////////////////////Initialization functions/////////////
 
-
-function levelLayout(level) {
-  var rows = [];
-  switch(level) {
-  case 1:
-    if(debugging) {     // remove at some point
-      rows.push(['cyan']);
-    }
-    else {
-    rows.push(['#003333']);
-    rows.push([0, 0, '#00CC33', '#00CC33',  '#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33', 0, 0]);
-    rows.push([0,'#CC6699','#CC6699','#00CC33', 0, 0, 0, 0,'#00CC33',  '#CC6699','#CC6699', 0]);
-    rows.push(['#CC6699','#CC6699','#CC6699',0, 0, 0, 0, 0, 0, '#CC6699','#CC6699','#CC6699'])  ;
-    rows.push([0,'#CC6699','#CC6699','#00CC33', 0, 0, 0,   0,'#00CC33','#CC6699','#CC6699', 0]);
-    rows.push([0,   0,'#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33','#00CC33', 0, 0]);
-    rows.push(['#003333']);  }
-    return rows;
-    break;
-  case 2:
-    rows.push(['gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold']);
-    rows.push([0]);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'brown','red','brown','red','brown','red','brown','red','brown','red']);
-    rows.push([0,'gold','gold','gold','gold','gold','gold','gold','gold','gold','gold',]);
-    return rows;
-    break;
-  case 3:
-    rows.push(['gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold','gold']);
-    rows.push(['gold','blue','blue','blue','blue','blue','blue','gold','gold','blue','blue','blue','blue','blue','blue','gold']);
-    rows.push(['gold','#0066CC',0,0,0 ,'#0066CC','#0066CC','#0066CC','#0066CC','#0066CC','#0066CC',0 ,0,0,'#0066CC','gold']);
-    rows.push(['gold','#3399FF',0 ,'#990033',0 ,'#990033','#3399FF','#3399FF','#3399FF','#3399FF','#990033',0 ,'#990033',0,'#3399FF','gold']);
-    rows.push(['gold','#0099CC',0 ,'#990033',0 ,'#0099CC','#990033','#0099CC','#0099CC','#990033','#0099CC',0 ,'#990033',0 ,'#0099CC','gold']);
-    rows.push(['gold','#33CCCC',0 ,0 ,0 ,'#33CCCC','#33CCCC','#990033','#990033','#33CCCC','#33CCCC',0 ,0 ,0 ,'#33CCCC','gold']);
-    rows.push(['gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold',0 ,0, 'gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold']);
-    rows.push(['gold','gold','gold','gold','gold','gold','gold',0 ,0 ,'gold','gold','gold','gold','gold','gold','gold',])
-    return rows;
-    break;
-  case 4:
-    rows.push([0]);
-    rows.push([0]);
-    rows.push(['gold']);
-    rows.push([0 ,'#330000',0 ,'#330000',0 ,'#330000']);
-    rows.push(['#990000','#990000','#990000']);
-    rows.push(['#330000',0 ,'#330000',0 ,'#330000',0]);
-    rows.push([0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633']);
-    rows.push(['#990000','#990000','#990000','#990000','#990000','#990000']);
-    rows.push(['#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0 ,'#FF6633',0]);
-    rows.push([0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',]);
-    rows.push(['#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC','#FFFFCC']);
-    rows.push(['#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0 ,'#FFFF66',0]);
-    return rows;
-    break;
-  case 5:
-  if(debugging) {
-    rows.push(['#111111']);
-  }
-  else {
-    rows.push([0]);
-    rows.push([0]);
-    rows.push([0]);
-    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);
-    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
-    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
-    rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
-    rows.push([0,'black','black','black','black','black','black','black','black','black','black','black','black','black','black',0]);
-     rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
-    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
-    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
-    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);}
-    return rows;
-    break;
-  }
-}
-
-
-=======
 
 ////////////////////Graphic effects////////////////////////////
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
+
+
+
+
 function randomShadowEffect() {
   var shadow1 = String('0 5px '+Math.floor((Math.random()*5)+20)+'px #FEFCC9');
   var shadow2 = String('0 '+Math.floor((Math.random()*5+8))+'px '+Math.floor((Math.random()*10+25))+'px #33FFFF');
@@ -609,55 +489,6 @@ function randomShadowEffect() {
   var shadowEffect = shadow1+','+shadow2+','+shadow3+','+shadow4+','+shadow5;
   return(shadowEffect);
 }
-
-<<<<<<< HEAD
-function initializeBall() {
-  var y = windowBorder.bottom * 0.8;
-  ball = new Ball(200, y, 3, -4);
-}
-
-function initializePlayerShip() {
-  $('<div>').addClass('playerShip collideableObject').appendTo('body');
-  $('.playerShip').draggable({axis: "x", containment: 'parent'});
-  setInterval(function() {
-    var shadowEffect = randomShadowEffect();
-    $('.playerShip').css({'box-shadow': shadowEffect});
-  }, 40);
-}
-
-function initializeLevel(level) {
-  var backgroundUrl = getBGUrlForLevel(level);
-  $('body').css({'background-image': 'url('+backgroundUrl+')' });
-  if(currentLevel%5 == 0) {
-    currentBGMusic = '#BossBattle';
-  }
-  else {
-    currentBGMusic = '#ChronoTheme';
-    $(currentBGMusic)[0].loop=true;
-    playSound(currentBGMusic);
-  }
-  blocksOnScreen = 0;
-  var rows = levelLayout(currentLevel);
-  for(var i=0; i<rows.length; i++) {
-    var row = rows[i];
-    var n = row.length;
-    var blockWidth = Math.floor(windowBorder.right/n-1);
-    var blockHeight = Math.floor(windowBorder.bottom*0.04 + 7);
-    for (var j=0; j<n; j++) {
-      if (row[j] != 0 && row[j] != 'gold') {
-        var block = new Block(windowBorder.right*(j/n), windowBorder.bottom * (i*0.05), blockWidth, blockHeight, row[j]);
-        blocksOnScreen++;
-      }
-      else if(row[j] == 'gold') {
-        var block = new Block(windowBorder.right*(j/n), windowBorder.bottom * (i*0.05), blockWidth, blockHeight, 'yellow');
-        $(block.html).addClass('invincible').css({'background-image': 'url(images/_325_1331547288.jpg)', 'box-shadow':'inset 5px 5px 8px white'});
-      }
-    }
-  }
-  initializeBall();
-}
-=======
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
 
 function keyHeldDown(event) {
   if(event.which === 37)  {  //left arrow, move ship left
@@ -681,26 +512,8 @@ function keyWasPressed(event) {
       interval = setInterval(gameLoop, timeDelay);
     }
   }
-<<<<<<< HEAD
-  else if(event.which === 80) { //'p' pressed.  pause/unpause game
-    if(interval) {
-      paused = true;
-      clearInterval(interval);
-      interval = null;
-      var message = $('<div><p>PAUSED</p><p>***Press p to continue, or q to quit***</p></div>').addClass('pauseMessage').appendTo('body');
-      $(currentBGMusic)[0].pause();
-    }
-    else {
-      paused = false;
-      $('.pauseMessage').remove();
-      interval = setInterval(gameLoop, timeDelay);
-      playSound(currentBGMusic);
-      }
-    }
-=======
   else if(event.which === 80) { //'p' pressed. pause/unpause game
     pauseKeyPressed();
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
   }
   else if(event.which === 81) {  //'q' pressed, quit if paused
     if(paused == true) {
@@ -719,17 +532,13 @@ function pauseKeyPressed() {
     clearInterval(interval);
     interval = null;
     var message = $('<div><p>PAUSED</p><p>***Press p to continue, or q to quit***</p></div>').addClass('pauseMessage').appendTo('body');
-    if(soundsEnabled) {
-      $(currentBGMusic)[0].pause();
-    }
+    $(currentBGMusic)[0].pause();
   }
   else {
     paused = false;
     $('.pauseMessage').remove();
     interval = setInterval(gameLoop, timeDelay);
-    if(soundsEnabled) {
-      $(currentBGMusic)[0].play();
-    }
+    playSound(currentBGMusic);
   }
 }
 

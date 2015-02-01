@@ -81,13 +81,10 @@ body {
   position: absolute;
   border-style: solid;
   border-color: gray;
-<<<<<<< HEAD
   z-index: 2;
   /*opacity: 0.99;*/
   box-shadow: inset 10px 0 20px #202020,
     inset 0 10px 20px #202020;
-=======
-  z-index: 5;
   box-shadow: inset 10px 10px 20px #202020;
 }
 
@@ -95,7 +92,6 @@ body {
   background-image: url('../images/_325_1331547288.jpg');
   background-size: cover;
   box-shadow: inset  -5px -5px 8px white;
->>>>>>> db31c5a3edabc5c7e9e75d480d54bb3fc476cec8
 }
 
 .congratulations {
