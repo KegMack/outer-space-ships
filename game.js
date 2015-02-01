@@ -3,7 +3,7 @@ var BALLSIZE = 12,
     MAX_DX = 4,
     MIN_DX = 0.8,
     livesRemaining = 3,
-    timeDelay = 1,
+    timeDelay = 12,
     blocksOnScreen = 0,
     debugging = true,
     currentLevel=1,
@@ -13,7 +13,9 @@ var BALLSIZE = 12,
     infiniteLives = false,
     ball = null,
     paused = false,
-    currentBGMusic;
+    currentBGMusic = null,
+    audioBuffer=[];
+
 
 var windowBorder = {
   left:0,
@@ -490,6 +492,11 @@ function randomShadowEffect() {
   return(shadowEffect);
 }
 
+
+///////////////USER INPUT EVENTS///////////////////////////////
+
+
+
 function keyHeldDown(event) {
   if(event.which === 37)  {  //left arrow, move ship left
     var x = $('.playerShip').offset().left;
@@ -507,7 +514,7 @@ function keyHeldDown(event) {
 
 function keyWasPressed(event) {
   if(event.which === 32)  {  //space key pressed, start interval
-    if(!interval && !paused) {
+    if(!interval) {
       $('.congratulations').remove();
       interval = setInterval(gameLoop, timeDelay);
     }
@@ -518,6 +525,15 @@ function keyWasPressed(event) {
   else if(event.which === 81) {  //'q' pressed, quit if paused
     if(paused == true) {
       window.location.href = 'home.html';
+    }
+  }
+  else if(event.which === 83 && !paused)  {  // 's' pressed, toggle sound
+    soundsEnabled = !soundsEnabled;
+    if(!soundsEnabled) {
+      $(currentBGMusic)[0].pause();
+    }
+    else {
+      playSound(currentBGMusic);
     }
   }
   else if(event.which === 90) {   //'z', for debugging. remove once we're sure ball won't get stuck in an infinite cycle
@@ -537,6 +553,7 @@ function pauseKeyPressed() {
   else {
     paused = false;
     $('.pauseMessage').remove();
+    $('.congratulations').remove();
     interval = setInterval(gameLoop, timeDelay);
     playSound(currentBGMusic);
   }
