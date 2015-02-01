@@ -47,7 +47,9 @@ function addGlow(element, time) {
 
 function addGlowClearPWPlayFanare() {
     addGlow('#password', 2000);
+    playFanfare();
     setTimeout(function() {$('#password').val("")}, 2000);
+
 }
 
 function passwordEntered() {

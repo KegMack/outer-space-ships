@@ -6,15 +6,14 @@ var BALLSIZE = 12,
     timeDelay = 12,
     blocksOnScreen = 0,
     debugging = true,
-    currentLevel=1,
-    interval= null,
+    currentLevel = 1,
+    interval = null,
     playerShipSpeed = 60,
     soundsEnabled = true,
     infiniteLives = false,
     ball = null,
     paused = false,
-    currentBGMusic = null,
-    audioBuffer=[];
+    currentBGMusic = null;
 
 
 var windowBorder = {
@@ -56,13 +55,13 @@ Ball.prototype.checkBorders = function() {
   if(this.y <= windowBorder.top) {
     this.dy = -this.dy;
     this.y = windowBorder.top;
-    playSound("#arrow");
+    playSound("sounds/Arrow.wav");
   }
   else if(this.y >= windowBorder.bottom - 3*BALLSIZE) {
     if(debugging) {
       this.dy = -this.dy;
       this.y = windowBorder.bottom - 3*BALLSIZE;
-      playSound("#arrow");
+      playSound("sounds/Arrow.wav");
     }
     else {        //////you die////////////////////////////////
       playerDied();
@@ -71,12 +70,12 @@ Ball.prototype.checkBorders = function() {
   if(this.x <= windowBorder.left) {
     this.dx = -this.dx;
     this.x = windowBorder.left;
-    playSound("#arrow");
+    playSound("sounds/Arrow.wav");
   }
   else if(this.x >= windowBorder.right - BALLSIZE) {
     this.dx = -this.dx;
     this.x = windowBorder.right - BALLSIZE;
-    playSound("#arrow");
+    playSound("sounds/Arrow.wav");
   }
 }
 
@@ -147,7 +146,7 @@ function pointIsWithinRectangle(point, x, y, width, height) {
 }
 
 function playerDied() {
-  playSound('#explosion');
+  playSound('explosion');
   $('.playerShip').hide("explode", 2000);
   $('.ball').hide("explode");
   clearInterval(interval);
@@ -172,7 +171,7 @@ function resetPlayerShipAndBall() {
 }
 
 function ballHitShip() {
-  playSound('#pong');
+  playSound('sounds/Pong.wav');
   var $ship = $('.playerShip');
   var velocity = Math.sqrt(ball.dy*ball.dy + ball.dx*ball.dx);     // a^2 + b^2 = c^2
   var xShipGradient = (ball.x-$ship.offset().left) / ($ship.width());
@@ -194,7 +193,7 @@ function ballHitShip() {
 
 function collisionHappened(collidee) {
   if($(collidee).hasClass('block')) {
-    playSound("#pong");
+    playSound("sounds/Arrow.wav");
     if(!$(collidee).hasClass('invincible')) {
       $(collidee).removeClass('collideableObject');
       $(collidee).hide('puff', 300, function() {
@@ -312,7 +311,7 @@ function initializeLevel(level) {
     currentBGMusic = '#ChronoTheme';
    }
   $(currentBGMusic)[0].loop=true;
-  playSound(currentBGMusic);
+  playMusic(currentBGMusic);
   initializeBlocks();
   initializeBall();
 }
@@ -402,9 +401,18 @@ function assignVariablesFromUrl() {
 ////////////GAME EVENT FUNCTIONS//////////////////////////////////
 
 
-function playSound(soundTag) {
+
+
+function playMusic(soundTag) {
   if(soundsEnabled) {
     $(soundTag)[0].play();
+  }
+}
+
+function playSound(soundFile) {
+  if(soundsEnabled) {
+    var soundEffect = new Audio(soundFile);
+    soundEffect.play();
   }
 }
 
@@ -428,7 +436,7 @@ function levelCompleted() {
   }
   else {
     $(currentBGMusic)[0].pause();
-    playSound("#fanfare");
+    playMusic("#fanfare");
     congratulationAnimation('HELL YEAH!');
     var password = passwordForLevel(currentLevel);
     setTimeout(function() {
@@ -448,7 +456,7 @@ function gameWasBeat() {
     $(document).off('keyup');
     }, 2000);
     $(currentBGMusic)[0].pause();
-    playSound("#YouWin");
+    playMusic("#YouWin");
   setTimeout(function() {
     $("<h1>You Saved the Galaxy!</h1>").addClass('congratulations').appendTo('body');
     setTimeout(function() {
@@ -533,7 +541,7 @@ function keyWasPressed(event) {
       $(currentBGMusic)[0].pause();
     }
     else {
-      playSound(currentBGMusic);
+      playMusic(currentBGMusic);
     }
   }
   else if(event.which === 90) {   //'z', for debugging. remove once we're sure ball won't get stuck in an infinite cycle
@@ -555,7 +563,7 @@ function pauseKeyPressed() {
     $('.pauseMessage').remove();
     $('.congratulations').remove();
     interval = setInterval(gameLoop, timeDelay);
-    playSound(currentBGMusic);
+    playMusic(currentBGMusic);
   }
 }
 
