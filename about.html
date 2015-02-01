@@ -1,0 +1,74 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <title>About Outerspaceship</title>
+    <link href="css/about-style.css" type="text/css" rel="stylesheet"/>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
+    <script src="jquery-ui-1.11.2.custom/jquery-ui.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>ABOUT OUTERSPACESHIPS FROM OUTER SPACE</h1>
+    </header>
+    <main>
+      <div class='accordion'>
+        <h2>COPYRIGHT INFORMATION</h2>
+        <section>
+          <p>This was created and written by Craig  Chaillie as a final project for the SEA-B28 Codefellows  educational course.  This is for <strong>educational   purposes ONLY</strong> and may not be published, reproduced,   disseminated, distributed, or any 5-syllable-lawyer-word- ed for any reason.  All background images were found by   google search and are copyrighted by their respective   owners.  All music in this game was purchased from  iTunes and is copyrighted by Square-Enix.  All sound   effects were pre-installed on my computer and were from   Yosemite OS and Microsoft Office. </p>
+         </section>
+        <h2>INSTRUCTIONS</h2>
+        <section>
+          <p><strong>Movement: </strong> Click and Drag ship withmouse *or* use left and right arrows on keyboard</p>
+          <p><strong>Start Level: </strong> 'spacebar'</p>
+          <p><strong>Pause: </strong> 'p'</p>
+          <p><strong>Quit to menu: </strong>'q' when game is paused</p>
+         </section>
+        <h2>ABOUT</h2>
+        <section>
+          <p>This program was created using the following programs and languages</p>
+           <ul>
+            <li>JavaScript</li>
+            <li>JQuery</li>
+            <li>JqueryUI</li>
+            <li>CSS3</li>
+            <li>HTML5</li>
+            <li>Sublime text editor</li>
+          </ul>
+          <p>It is meant to be a throwback to past-generation  games such as Arkanoid, by Taito, and Breakout, by Atari. </p><p>  It has been a goal of mine as long as I can   remember to create a functional video game, and this was  a great opportunity to accomplish that, while also   learning the above languages.</p>
+         </section>
+        <h2>ACKNOWLEDGEMENTS</h2>
+        <section>
+          <p>Shout out to the following people and organizations who've assisted me in the creation of this game:</p>
+           <ul>
+            <li>Mom and Dad, for being awesome!</li>
+            <li>The awesome Codefellows instructors: BrookRiggio,  Mel Quark, and Dexter Lesaca.  Four weeks ago, I didn't know what CSS or Javascript even meant.Thanks for teaching me sooo much, and for being more than patient with my consistent stupidity : )</li>
+             <li>Chareesa Graham, Stephanie Lingwood, Adron Hall, and all classmates, for their patience with my consistent stupidity</li>
+             <li><a href="http://bassistance.de/2011/12/09/vector-math-basics-to-animate-a-bouncing-ball-in-javascript/">  http://bassistance.de/2011/12/09/vector-math-basics-to- animate-a-bouncing-ball-in-javascript/</a> for kindly  sharing his ball bouncing jquery awesomeness so I  could figure some of this out.</li>
+             <li><a href="http://line25.com/articles/using-css-text-shadow-to-create-cool-text-effects">http://line25. com/articles/using-css-text-shadow-to-create-cool-text-effects</a> for sharing their badass and extremely creative use of css shadowing.  You guys made this program go from really cheesy, to really cheesy with some kickass graphic effects!</li>
+             <li><a href="http://www.dafont.com/8bit-wonder.font">http://www.dafont.com/8bit-wonder.font</a> for sharing   their cool retro 8-bit font!</li>
+             <li>Anyone who's played this game! Try the password SPAMHUMBUG if you're not into the whole 'game over' thing : ) </li>
+           </ul>
+        </section>
+      </div>
+      <button id="home">BACK TO ORBIT</button>
+    </main>
+    <script>
+      $('.accordion').accordion({
+        heightStyle: 'content',
+        collapsible: true,
+        active: false
+      });
+      $('h2').hover(function() {
+        $(this).addClass('extraGlow');
+        $(this).css({opacity: 1});
+        },   function() {
+        $(this).removeClass('extraGlow');
+        $(this).css({opacity: 0.6});
+      });
+      $('#home').on('click', function(){
+          window.location.href = 'home.html';
+      })
+    </script>
+  </body>
+</html>
