@@ -1,0 +1,46 @@
+<script>
+
+var userInGameGuess;
+var computerSpies;
+var userRandInput1;
+var userRandInput2;
+var userRandInput3;
+var userYesResponse;
+
+userRandInput1=prompt("Observe the Room. Type one thing you see. Dont tell anybody")
+userYesResponse=("Thank You. Can you spy two more object?");
+   if(userYesResponse==='yes'.toUpperCase()){
+       userRandInput2=prompt("Hi again! What do you spie?");
+   }else{
+   window.close();
+}
+userRandInput3=prompt("Whats the last object?");
+   console.log("Thank you. The computer will now find these Objects in the room");
+
+   if(computerSpies=<.33){
+       computerSpies="chair".toUpperCase();
+   }
+   else if(computerSpies=.66){
+       computerSpies="projector".toUpperCase();
+   }
+   else{
+       computerSpies="tv".toUpperCase();
+   }
+
+userInGameGuess=prompt("Now remember your objects. They were a"+ " Chair", +" a Television"+ " and a "+ "Desk"+"."+" The computer has finished finding your object. Can you guess which one???");
+
+function compare(userInGameGuess,computerSpies){
+   if(userInGameGuess===computerSpies){
+       alert("You guessed"+computerSpies+"that is correct!")
+
+   }else{
+       console.log("Better Luck next time!");
+       window.close();
+   }
+}
+
+
+}
+
+
+</script>

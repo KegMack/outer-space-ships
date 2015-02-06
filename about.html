@@ -15,11 +15,11 @@
       <div class='accordion'>
         <h2>COPYRIGHT INFORMATION</h2>
         <section>
-          <p>This was created and written by Craig  Chaillie as a final project for the SEA-B28 Codefellows  educational course.  This is for <strong>educational   purposes ONLY</strong> and may not be published, reproduced,   disseminated, distributed, or any 5-syllable-lawyer-word- ed for any reason.  All background images were found by   google search and are copyrighted by their respective   owners.  All music in this game was purchased from  iTunes and is copyrighted by Square-Enix.  All sound   effects were pre-installed on my computer and were from   Yosemite OS and Microsoft Office. </p>
+          <p>This was created and written by Craig Chaillie as a final project for the SEA-B28 Codefellows educational course.  This is for <strong>educational purposes ONLY</strong> and may not be published, reproduced, disseminated, distributed, or any 5-syllable-lawyer-word- ed for any reason.  All background images were found by google search and are copyrighted by their respective owners.  All music in this game was purchased from  iTunes and is copyrighted by Square-Enix.  All sound effects were pre-installed on my computer and were from Yosemite OS and Microsoft Office. </p>
          </section>
         <h2>INSTRUCTIONS</h2>
         <section>
-          <p><strong>Movement: </strong> Click and Drag ship withmouse *or* use left and right arrows on keyboard</p>
+          <p><strong>Movement: </strong> Click and Drag ship with mouse *or* use left and right arrows on keyboard</p>
           <p><strong>Start Level: </strong> 'spacebar'</p>
           <p><strong>Pause: </strong> 'p'</p>
           <p><strong>Quit to menu: </strong>'q' when game is paused</p>
@@ -55,21 +55,23 @@
       <button id="home">BACK TO ORBIT</button>
     </main>
     <script>
-      $('.accordion').accordion({
-        heightStyle: 'content',
-        collapsible: true,
-        active: false
+      $(function() {
+        $('.accordion').accordion({
+          heightStyle: 'content',
+          collapsible: true,
+          active: false
+        });
+        $('h2').hover(function() {
+          $(this).addClass('extraGlow');
+          $(this).css({opacity: 1});
+          },   function() {
+          $(this).removeClass('extraGlow');
+          $(this).css({opacity: 0.6});
+        });
+        $('#home').on('click', function(){
+            window.location.href = 'home.html';
+        })
       });
-      $('h2').hover(function() {
-        $(this).addClass('extraGlow');
-        $(this).css({opacity: 1});
-        },   function() {
-        $(this).removeClass('extraGlow');
-        $(this).css({opacity: 0.6});
-      });
-      $('#home').on('click', function(){
-          window.location.href = 'home.html';
-      })
     </script>
   </body>
 </html>

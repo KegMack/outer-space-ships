@@ -5,7 +5,7 @@ var BALLSIZE = 12,
     livesRemaining = 3,
     timeDelay = 12,
     blocksOnScreen = 0,
-    debugging = true,
+    debugging = false,
     currentLevel = 1,
     interval = null,
     playerShipSpeed = 60,
@@ -146,7 +146,7 @@ function pointIsWithinRectangle(point, x, y, width, height) {
 }
 
 function playerDied() {
-  playSound('explosion');
+  playSound('sounds/Explosion.wav');
   $('.playerShip').hide("explode", 2000);
   $('.ball').hide("explode");
   clearInterval(interval);
@@ -522,7 +522,7 @@ function keyHeldDown(event) {
 
 function keyWasPressed(event) {
   if(event.which === 32)  {  //space key pressed, start interval
-    if(!interval) {
+    if(!interval && !paused) {
       $('.congratulations').remove();
       interval = setInterval(gameLoop, timeDelay);
     }
