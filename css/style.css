@@ -66,11 +66,24 @@ body {
   border-width: 2px;
   position: absolute;
   border-radius: 100%;
-/*  box-shadow:30px 0 30px #feec85,
-    10px 30px 30px #ec760c,
-    10px -40px 50px #cd4606,
-    -30px 10px 60px #973716;
-*/}
+  box-shadow:10px 0 30px #feec85,
+    -10px 0px 30px #ec760c,
+    0px 10px 30px #cd4606,
+    0px -10px 30px #973716;
+}
+
+.boss {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  width: 15%;
+  height: 18%;
+  border-radius: 100%;
+  background-image: url("../images/monster1.jpg");
+  /*background-image: url("../images/dexter.jpg");*/
+  background-repeat: no-repeat;
+  background-size: 100%
+}
 
 .collidableObject {
 
@@ -82,10 +95,11 @@ body {
   border-style: solid;
   border-color: gray;
   z-index: 2;
-  /*opacity: 0.99;*/
   box-shadow: inset 10px 0 20px #202020,
     inset 0 10px 20px #202020;
   box-shadow: inset 10px 10px 20px #202020;
+  border-top-width:1px;
+  border-top-color: black;
 }
 
 .invincible {
@@ -125,4 +139,5 @@ body {
   font-size: 40px;
   text-align: center;
   color: brown;
+  z-index: 11;
 }

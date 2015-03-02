@@ -1,10 +1,10 @@
 var BALLSIZE = 12,
-    FINAL_LEVEL = 5,
     MAX_DX = 4,
     MIN_DX = 0.8,
-    livesRemaining = 3,
     timeDelay = 12,
+    livesRemaining = 3,
     blocksOnScreen = 0,
+    FINAL_LEVEL = 6,
     debugging = false,
     currentLevel = 1,
     interval = null,
@@ -12,7 +12,9 @@ var BALLSIZE = 12,
     soundsEnabled = true,
     infiniteLives = false,
     ball = null,
+    boss = null,
     paused = false,
+    bossIsMoving = true;
     currentBGMusic = null;
 
 
@@ -41,6 +43,42 @@ function Ball(x, y, dx, dy) {
   this.dy = dy;       //delta y
   this.html = $('<div>').addClass('ball').css({left:this.x, top:this.y, width:BALLSIZE, height:BALLSIZE}).appendTo('body');
 };
+
+function Boss(x, y) {
+  this.x = x;
+  this.y = y;
+  this.phaseX = Math.PI;
+  this.phaseY = Math.PI;
+  this.html = $('<div>').addClass('boss collideableObject').css({left: this.x, top:this.y }).appendTo('body');
+};
+
+function DownwardMovingObject(x, y, speed) {
+  this.x = x;
+  this.y = y;
+  this.dy = speed;
+}
+
+
+
+
+Boss.prototype.moveSinusoidally = function() {
+  if(bossIsMoving) {
+    this.phaseX += 0.005;
+    this.phaseY += 0.009;
+    this.x = getNextSinusoidalPosition(this.phaseX, windowBorder.right/3, windowBorder.right/2.6);
+    this.y = getNextSinusoidalPosition(this.phaseY, windowBorder.bottom/5, windowBorder.bottom/3);
+    this.html.css({
+      left: this.x,
+      top: this.y
+      });
+  }
+}
+
+
+function getNextSinusoidalPosition(phase, amplitude, displacement) {
+  return displacement + Math.sin(Math.PI*phase) * amplitude;
+}
+
 
 Ball.prototype.move = function() {
   this.x += this.dx;
@@ -132,7 +170,7 @@ Ball.prototype.checkCollision = function() {
         collisionHappened(this);
       }
     }
-  })
+  });
 }
 
 //////////////////////OBJECT HELPER METHODS/////////////////////////////
@@ -171,7 +209,7 @@ function resetPlayerShipAndBall() {
 }
 
 function ballHitShip() {
-  playSound('sounds/Pong.wav');
+  playSound('sounds/Bong.mp3');
   var $ship = $('.playerShip');
   var velocity = Math.sqrt(ball.dy*ball.dy + ball.dx*ball.dx);     // a^2 + b^2 = c^2
   var xShipGradient = (ball.x-$ship.offset().left) / ($ship.width());
@@ -193,7 +231,7 @@ function ballHitShip() {
 
 function collisionHappened(collidee) {
   if($(collidee).hasClass('block')) {
-    playSound("sounds/Arrow.wav");
+    playSound("sounds/Bong.mp3");
     if(!$(collidee).hasClass('invincible')) {
       $(collidee).removeClass('collideableObject');
       $(collidee).hide('puff', 300, function() {
@@ -204,6 +242,11 @@ function collisionHappened(collidee) {
         levelCompleted();
       }
     }
+  }
+  else if($(collidee).hasClass('boss')) {
+    bossIsMoving = false;
+    $('.boss').effect('pulsate', 500);
+    setTimeout(function(){ bossIsMoving = true; }, 500);
   }
 }
 
@@ -247,7 +290,7 @@ function levelLayout(level) {
     rows.push(['gold','#3399FF',0 ,'#990033',0 ,'#990033','#3399FF','#3399FF','#3399FF','#3399FF','#990033',0 ,'#990033',0,'#3399FF','gold']);
     rows.push(['gold','#0099CC',0 ,'#990033',0 ,'#0099CC','#990033','#0099CC','#0099CC','#990033','#0099CC',0 ,'#990033',0 ,'#0099CC','gold']);
     rows.push(['gold','#33CCCC',0 ,0 ,0 ,'#33CCCC','#33CCCC','#990033','#990033','#33CCCC','#33CCCC',0 ,0 ,0 ,'#33CCCC','gold']);
-    rows.push(['gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold',0 ,0, 'gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold']);
+    rows.push(['gold','#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC', 0,0 ,0, 0,'#33FFCC','#33FFCC','#33FFCC','#33FFCC','#33FFCC','gold']);
     rows.push(['gold','gold','gold','gold','gold','gold','gold',0 ,0 ,'gold','gold','gold','gold','gold','gold','gold',])
     return rows;
     break;
@@ -267,22 +310,27 @@ function levelLayout(level) {
     return rows;
     break;
   case 5:
-  if(debugging) {    // remove at some point
-    rows.push(['#111111']);
-  }
-  else {
-    rows.push([0]);
-    rows.push([0]);
-    rows.push([0]);
-    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);
-    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
-    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
-    rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
-    rows.push([0,'black','black','black','black','black','black','black','black','black','black','black','black','black','black',0]);
-     rows.push([0,0,'black','purple','#505050','#505050','#505050','#505050','#505050','#505050','#505050','#505050','purple','black',0,0]);
-    rows.push([0,0,0,'black','purple','#383838','#383838','#383838','#383838','#383838','#383838','purple','black',0,0,0,]);
-    rows.push([0,0,0,0,'gold','purple','purple','purple','purple','purple','purple','gold',0,0,0,0,]);
-    rows.push([0,0,0,0,0,'black','black','black','black','black','black',0,0,0,0,0,]);}
+    if(debugging) {    // remove at some point
+      rows.push(['#111111']);
+    }
+    else {
+      rows.push([0, 'red', 'red', 0]);
+      rows.push([0]);
+      rows.push([0]);
+      rows.push([0,0,0,0,0,'black','black','black','  black','black','black',0,0,0,0,0,]);
+      rows.push([0,0,0,0,'gold','purple','purple',' purple','purple','purple','purple','gold',0, 0,0,0,]);
+      rows.push([0,0,0,'black','purple','#383838',' #383838','#383838','#383838','#383838',' #383838','purple','black',0,0,0,]);
+      rows.push([0,0,'black','purple','#505050',' #505050','#505050','#505050','#505050',' #505050','#505050','#505050','purple','black ',0,0]);
+      rows.push([0,'black','black','black','black','  black','black','black','black','black','  black','black','black','black','black',0]);
+       rows.push([0,0,'black','purple','#505050','  #505050','#505050','#505050','#505050','  #505050','#505050','#505050','purple',' black',0,0]);
+      rows.push([0,0,0,'black','purple','#383838',' #383838','#383838','#383838','#383838',' #383838','purple','black',0,0,0,]);
+      rows.push([0,0,0,0,'gold','purple','purple',' purple','purple','purple','purple','gold',0, 0,0,0,]);
+      rows.push([0,0,0,0,0,'black','black','black','  black','black','black',0,0,0,0,0,]);
+    }
+    return rows;
+    break;
+  case 6:
+    boss = new Boss(windowBorder.right/3, windowBorder.bottom/10);
     return rows;
     break;
   }
@@ -352,6 +400,9 @@ function getBGUrlForLevel(level) {
     return("images/Outer-Space-Planets-22_www.FullHDWpp.com_.jpg");
     break;
   case 5:
+    return("images/PIA16695-BlackHole-Corona-20130227.jpg");
+    break;
+  case 6:
     return("images/PIA16695-BlackHole-Corona-20130227.jpg");
     break;
   default:
@@ -567,17 +618,22 @@ function pauseKeyPressed() {
   }
 }
 
+function windowWasResized() {
+  windowBorder.right = $(window).width();
+  windowBorder.bottom = $(window).height();
+}
+
 function gameLoop() {
+  if(boss) {
+    boss.moveSinusoidally();
+  }
   ball.move();
   ball.checkBorders();
   ball.checkCollision();
 }
 
 $(function() {
-  $(window).resize(function() {
-    windowBorder.right = $(window).width();
-    windowBorder.bottom = $(window).height();
-  }).trigger("resize");
+  $(window).resize(windowWasResized).trigger("resize");
   assignVariablesFromUrl();
   initializeLevel(currentLevel);
   initializePlayerShip();
@@ -589,8 +645,6 @@ $(function() {
     keyWasPressed(event)
   });
 });
-
-
 
 
 /////// Properties accessed by jquery /////////////////
